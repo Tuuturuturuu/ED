@@ -46,7 +46,10 @@ tDate2::tDate2(int d, int m, int y){
     this-> year = y;
 
 }
+/*
 tambien puedes hacer este constructor:
+(se llama constructor por copia)
+*/
 tDate2:: tDate2(const tDate2 &date){
     day = date.day;
     month = date.month;
