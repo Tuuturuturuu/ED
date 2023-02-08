@@ -10,7 +10,7 @@ Horas::Horas() {
 }
 
 Horas::Horas(int hora, int minuto, int seg) {
-	if(hora < 0 || hora > 23 || minuto < 0 || seg > 59) throw 
+	if (hora < 0 || hora > 23 || minuto < 0 || seg > 59) throw Excepcion();
 	_horas = hora;
 	_minutos = minuto;
 	_segundos = seg;
@@ -20,14 +20,26 @@ bool Horas::operator<(const Horas& h2) const {
 	return (_horas < h2._horas) && (_minutos == h2._minutos) && (_segundos == h2._segundos);
 }
 
-ostream& operator<<(ostream& out, const Horas& h) {
+inline ostream& operator<<(ostream& out, horas const& h) {
+	h.print(out);
+	return out;
+}
+inline istream& operator>>(istream& in, horas& h) {
+	h.read(in);
+	return in;
+}
+
+/*
+ostream& operator<<(ostream& out, const Horas& h){
 	out << h._horas << ":" << h._minutos << ":" << h._segundos;
 	return out;
 }
 
-istream& operator>>(istream& in, Horas& h) {
-
+istream& operator>>(istream& in, Horas& h){//ns si esta bien asi
+	h.read(in);
+	return in;
 }
+*/
 
 
 
