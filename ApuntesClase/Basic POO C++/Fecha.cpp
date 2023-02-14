@@ -3,11 +3,7 @@
 using namespace std;
 
 //CONSTRUCTOR POR DEFECTO: (sin parametros)
-Fecha::Fecha(){ //si lo definimos fuera de la clase añadimos Fecha::
-    dia = 1;
-    mes = 1;
-    anyo = 1900;
-}
+
 //CONSTRUCTOR ON PARAMETROS:
 Fecha::Fecha(int dia, int mes, int anyo){
     this->dia = dia;
