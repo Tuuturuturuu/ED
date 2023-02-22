@@ -1,0 +1,6 @@
+﻿  Main.cpp
+  Polinomio.cpp
+C:\Users\marga\eclipse-workspace\ED\DOMjudge\T102 - Evaluar un polinomio\T102 - Evaluar un polinomio\Polinomio.cpp(26,78): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\marga\eclipse-workspace\ED\DOMjudge\T102 - Evaluar un polinomio\T102 - Evaluar un polinomio\Polinomio.cpp(39,30): warning C4018: '<': no coinciden signed/unsigned
+  Generando código...
+  T102 - Evaluar un polinomio.vcxproj -> C:\Users\marga\eclipse-workspace\ED\DOMjudge\T102 - Evaluar un polinomio\x64\Debug\T102 - Evaluar un polinomio.exe
