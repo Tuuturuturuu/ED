@@ -1,10 +1,6 @@
-
 #include "Horas.h"
 
-using namespace std;
-
-
-//metodos publicos:
+// constructores
 Horas::Horas() {
 	_hora = 0;
 	_mins = 0;
@@ -12,7 +8,7 @@ Horas::Horas() {
 }
 
 Horas::Horas(int h, int m, int s) {
-	if (!comprobar()) {
+	if (!comprobar(h, m, s)) {
 		throw EInvalidHour();
 	}
 	_hora = h;
@@ -20,45 +16,48 @@ Horas::Horas(int h, int m, int s) {
 	_segs = s;
 }
 
-bool Horas::operator <(const Horas& h2) const {
+bool Horas::comprobar(int h, int m, int s) {
+	return h < 24 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0;
+}
+
+//operators
+bool Horas::operator<(const Horas& h2) const {
 	//hora
-	if (_hora > h2._hora) 
+	if (_hora > h2._hora)
 		return false;
-	
+
 	if (_hora < h2._hora)
 		return true;
 	//mins
-	if (_mins > h2._mins) 
+	if (_mins > h2._mins)
 		return false;
-	
+
 	if (_mins < h2._mins)
 		return true;
 	//segs
-	if (_segs > h2._segs) 
+	if (_segs > h2._segs)
 		return false;
-	
+
 	if (_segs < h2._segs)
 		return true;
 
 	return false;
 }
 
-ostream& operator <<(ostream& out, const Horas& h) {
-	//formamos un output y se returnea para imprimirlo
-	out << h._hora << ":" << h._mins << ":" << h._segs;
+ostream& operator<<(ostream& out, const Horas& h) {
+
+	out << std::setfill('0') << std::setw(2) << h._hora << ':'
+		<< std::setfill('0') << std::setw(2) << h._mins << ':'
+		<< std::setfill('0') << std::setw(2) << h._segs << '\n';
+
 	return out;
 }
 
-istream& operator >>(istream& is, Horas& h) {
-	//is >> h._hora >> h._mins >> h._segs;
-	char input[8];
-	is >> input;
-	scanf(input, "%02d:%02d:%02d", h._hora, h._mins, h._segs);
-	is.clear();
-	return is;
-}
+istream& operator>>(istream& is, Horas& h) {
+	char c;
+	int _h, _m, _s;
+	is >> _h >> c >> _m >> c >> _s;
+	h = Horas(_h, _m, _s);
 
-//metodos privados:
-bool Horas::comprobar() {
-	return _hora < 24 && _hora >= 0 && _mins < 60 && _mins >= 0 && _segs < 60 && _segs >= 0;
+	return is;
 }
