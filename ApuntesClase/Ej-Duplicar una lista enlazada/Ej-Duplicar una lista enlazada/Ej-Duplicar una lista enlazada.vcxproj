@@ -144,6 +144,9 @@
   <ItemGroup>
     <ClInclude Include="list_linked_single.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sample.in" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

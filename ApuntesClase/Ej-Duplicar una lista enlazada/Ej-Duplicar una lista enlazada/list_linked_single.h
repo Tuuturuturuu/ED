@@ -24,7 +24,7 @@
 class ListLinkedSingle {
 private:
     struct Node {
-        std::string value;
+        int value;
         Node* next;
     };
 
@@ -34,12 +34,12 @@ public:
         delete_list(head);
     }
 
-    void push_front(const std::string& elem) {
+    void push_front(const int& elem) {
         Node* new_node = new Node{ elem, head };
         head = new_node;
     }
 
-    void push_back(const std::string& elem);
+    void push_back(const int& elem);
     void duplicate();
     void invert();
     void merge(ListLinkedSingle other);
@@ -59,31 +59,31 @@ public:
         return head == nullptr;
     };
 
-    const std::string& front() const {
+    const int& front() const {
         assert(head != nullptr);
         return head->value;
     }
 
-    std::string& front() {
+    int& front() {
         assert(head != nullptr);
         return head->value;
     }
 
-    const std::string& back() const {
+    const int& back() const {
         return last_node()->value;
     }
 
-    std::string& back() {
+    int& back() {
         return last_node()->value;
     }
 
-    const std::string& at(int index) const {
+    const int& at(int index) const {
         Node* result_node = nth_node(index);
         assert(result_node != nullptr);
         return result_node->value;
     }
 
-    std::string& at(int index) {
+    int& at(int index) {
         Node* result_node = nth_node(index);
         assert(result_node != nullptr);
         return result_node->value;
@@ -105,37 +105,41 @@ private:
 
 //O(N) siendo N el  numero de elementos de la lista
 void ListLinkedSingle::duplicate() {
-    Node* curr = head;
-    Node* next = curr->next;
-    while (curr->next != nullptr) {
+    if (head != nullptr){
+        Node* curr = head;
+        Node* next = curr->next;
+        while (curr->next != nullptr) {
         
-        Node* new_node = new Node{};
-        new_node->value = curr->value;
-        curr->next = new_node;
-        new_node->next = next;
-        curr = next;
-        next = next->next;
+            Node* new_node = new Node{};
+            new_node->value = curr->value;
+            curr->next = new_node;
+            new_node->next = next;
+            curr = next;
+            next = next->next;
+        }
+        Node* newLastNode = new Node{};
+        newLastNode->value = curr->value;
+        curr->next = newLastNode;
+        newLastNode->next = nullptr;
     }
-    Node* newLastNode = new Node{};
-    newLastNode->value = curr->value;
-    curr->next = newLastNode;
-    newLastNode->next = nullptr;
 }
 
 //O(N) siendo N el  numero de elementos de la lista
 void ListLinkedSingle::invert() {
-    Node* prev = head;
-    Node* curr = prev->next;
-    Node* next = curr->next;
-    while (curr->next != nullptr) {
+    if (head != nullptr && head->next != nullptr){
+        Node* prev = head;
+        Node* curr = prev->next;
+        Node* next = curr->next;
+        while (curr->next != nullptr) {
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            next = next->next;
+        }
         curr->next = prev;
-        prev = curr;
-        curr = next;
-        next = next->next;
+        head->next = nullptr;
+        head = curr;
     }
-    curr->next = prev;
-    head->next = nullptr;
-    head = curr;
 }
 
 //O(N) siendo N el  numero de elementos de la lista
@@ -168,7 +172,7 @@ void ListLinkedSingle::delete_list(Node* start_node) {
     }
 }
 
-void ListLinkedSingle::push_back(const std::string& elem) {
+void ListLinkedSingle::push_back(const int& elem) {
     Node* new_node = new Node{ elem, nullptr };
     if (head == nullptr) {
         head = new_node;

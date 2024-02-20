@@ -24,4 +24,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sample.in">
+      <Filter>Archivos de origen</Filter>
+    </None>
+  </ItemGroup>
 </Project>
