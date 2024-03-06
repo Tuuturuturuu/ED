@@ -55,7 +55,6 @@
 #include <string> 
 #include <utility>
 #include <queue>
-#include <deque>
 
 using namespace std;
 //@ <answer>
@@ -65,51 +64,62 @@ using namespace std;
 // 
 // Añade los tipos de datos auxiliares y funciones que necesites
 
-//O(t) siendo t = N*T
+// O(1)
+bool suspenso(char examinador, char resultado, int suspensos) {
+    switch (examinador) {
+    case 'A':
+        //devolvemos el resultado del examen segun el criterio de Agapita
+        if (resultado == 'M') {
+            return true;
+        }
+        break;
+    case 'B':
+        //devolvemos el resultado del examen segun el criterio de Benito
+        if (resultado == 'M') {
+            if (suspensos < 2) {
+                return true;
+            }
+        }
+        break;
+    default:
+        //devolvemos el resultado del examen segun el criterio del "guapito"
+        return true;
+        break;
+    }
+
+    return false;
+}
+
+//O(t) siendo t = N*T (numero de horas al dia * numero de dias de examen)
 int  alumnosPendientes(int N, int T, queue<char> examinadores, queue<char> resultados, queue<int> nSuspensos) {
     int i = 0;
-    int j;
-    
-    while (i < T) {
-        j = 0;
-        while (j < N && !resultados.empty()) {
-            switch (examinadores.front()) {
-            case 'A':
-                //actualizamos la cola de resultados segun el criterio de Agapita
-                if (resultados.front() == 'M') {
-                    resultados.push(resultados.front()); 
-                    nSuspensos.push(nSuspensos.front() + 1);
-                }
-                break;
-            case 'B':
-                //actualizamos la cola de resultados segun el criterio de Benito
-                if (resultados.front() == 'M') {
-                    if (nSuspensos.front() < 2) {
-                        resultados.push(resultados.front());
-                        nSuspensos.push(nSuspensos.front() + 1);
-                    }
-                }
-                break;
-            default:
-                //actualizamos la cola de resultados segun el criterio del "guapito"
-                resultados.push(resultados.front());
-                nSuspensos.push(nSuspensos.front() + 1);
-                break;
-            }
-            nSuspensos.pop();
-            resultados.pop();
 
-            //actualizamos la cola de examinadores
-            examinadores.push(examinadores.front());
-            examinadores.pop();
-           
-            j++;
+    char examinador;
+    char resultado;
+    int suspensos;
+
+    while (i < T*N && !resultados.empty()) { //O(T*N)
+
+        examinador = examinadores.front();
+        resultado = resultados.front();
+        suspensos = nSuspensos.front();
+
+        if (suspenso(examinador, resultado, suspensos)) {
+            resultados.push(resultados.front());
+            nSuspensos.push(nSuspensos.front() + 1);
         }
+
+        nSuspensos.pop();
+        resultados.pop();
+
+        //actualizamos la cola de examinadores
+        examinadores.push(examinadores.front());
+        examinadores.pop();
+           
         i++;
     }
     return resultados.size();
 }
-
 
 // Implementa aquí la función para tratar UN caso de prueba. La función
 // devuelve false si, en lugar de encontrarse con un caso de prueba, se ha
