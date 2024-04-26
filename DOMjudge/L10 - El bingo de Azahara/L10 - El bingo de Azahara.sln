@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "L10 - El bingo de Azahara", "L10 - El bingo de Azahara\L10 - El bingo de Azahara.vcxproj", "{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Debug|x64.ActiveCfg = Debug|x64
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Debug|x64.Build.0 = Debug|x64
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Debug|x86.ActiveCfg = Debug|Win32
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Debug|x86.Build.0 = Debug|Win32
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Release|x64.ActiveCfg = Release|x64
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Release|x64.Build.0 = Release|x64
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Release|x86.ActiveCfg = Release|Win32
+		{92846CEA-D0AA-4B3C-9F76-EE2C813C54D2}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4668F29A-654F-46E4-8954-CB5F20705191}
+	EndGlobalSection
+EndGlobal

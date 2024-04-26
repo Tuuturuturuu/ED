@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "L08 - Los viejos teclados T9", "L08 - Los viejos teclados T9\L08 - Los viejos teclados T9.vcxproj", "{4251792C-5511-47D5-971D-1ADE4DA19531}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Debug|x64.ActiveCfg = Debug|x64
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Debug|x64.Build.0 = Debug|x64
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Debug|x86.ActiveCfg = Debug|Win32
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Debug|x86.Build.0 = Debug|Win32
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Release|x64.ActiveCfg = Release|x64
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Release|x64.Build.0 = Release|x64
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Release|x86.ActiveCfg = Release|Win32
+		{4251792C-5511-47D5-971D-1ADE4DA19531}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80922900-B0BD-4C19-A207-5905DA6E7670}
+	EndGlobalSection
+EndGlobal

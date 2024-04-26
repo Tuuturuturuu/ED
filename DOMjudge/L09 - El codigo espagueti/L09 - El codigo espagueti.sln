@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "L09 - El codigo espagueti", "L09 - El codigo espagueti\L09 - El codigo espagueti.vcxproj", "{1612F072-E549-4683-8EEA-C563D44B293C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Debug|x64.ActiveCfg = Debug|x64
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Debug|x64.Build.0 = Debug|x64
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Debug|x86.ActiveCfg = Debug|Win32
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Debug|x86.Build.0 = Debug|Win32
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Release|x64.ActiveCfg = Release|x64
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Release|x64.Build.0 = Release|x64
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Release|x86.ActiveCfg = Release|Win32
+		{1612F072-E549-4683-8EEA-C563D44B293C}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58A91A15-7B1D-496C-8917-9B8F829021E9}
+	EndGlobalSection
+EndGlobal
