@@ -129,7 +129,16 @@ public:
         infoSerpiente.cuerpo.push_back(posicion);
 
         //añadimos la serpiente al mapa de puntuaciones con puntuacion 0
-        infoSerpiente.ptrPuntos = mapaPuntuaciones.insert(make_pair(0, nombre));//O(logM)
+        if (!mapaPuntuaciones.count(0)) {//O(logM)
+            list<string> list;
+            list.push_back(nombre);
+            mapaPuntuaciones[0] = list;
+        }
+        else {
+            mapaPuntuaciones[0].push_front(nombre);
+        }
+
+        infoSerpiente.ptrPuntos = mapaPuntuaciones.at(0).begin();
 
         mapaSerpientes[nombre] = infoSerpiente;
         //marcar la posicion del tablero introducida como ocupada por una serpiente
@@ -159,9 +168,9 @@ public:
 
     //Complejidad: avanzar la serpiente tiene coste O(1) (constante), excepto en el 
     //caso de que la serpiente sea eliminada, en cuyo caso el coste sería O(N), siendo N el numero de elementos del cuerpo 
-    //de la serpiente a eliminar/la longitud de esta.
-    // Ademas en el caso en el que una serpiente coma una manzana de puntuacion mayor a 0, el coste de inserción en el mapa 
-    // de Puntuaciones sería O(logM) con M siendo el numero de serpientes del mapa de Puntuaciones (y del juego)
+    //de la serpiente a eliminar/la longitud de esta.  
+    //Ademas en el caso en el que una serpiente coma una manzana de puntuacion mayor a 0, el coste de inserción en el mapa 
+    //de Puntuaciones sería O(logM) con M siendo el numero de serpientes del mapa de Puntuaciones (y del juego)
     bool avanzar(const string& nombre, const Direccion& dir) {
         bool ret = false;
 
@@ -206,8 +215,9 @@ public:
                     tablero[infoS.cuerpo.front()] = Elemento::Nada;
                     infoS.cuerpo.pop_front();
                 }
+                
                 //eliminas del mapa de puntuaciones la serpiente que ha comido la manzana para mas tarde volverla a añadir con su nueva puntuacion
-                mapaPuntuaciones.erase(infoS.ptrPuntos);//O(1)
+                mapaPuntuaciones[infoS.puntos].erase(infoS.ptrPuntos);
 
                 mapaSerpientes.erase(nombre);//se elimina la serpiente del juego
 
@@ -221,12 +231,22 @@ public:
             movimiento(nombre, x, y, infoS);//O(1)
             if (mapaManzanas[{x, y}].puntos != 0) {
                 //eliminas del mapa de puntuaciones la serpiente que ha comido la manzana para mas tarde volverla a añadir con su nueva puntuacion
-                mapaPuntuaciones.erase(infoS.ptrPuntos);//O(1) (estamos accediendo directamente ci nel iterador a la posicion que queremos)
+                mapaPuntuaciones[infoS.puntos].erase(infoS.ptrPuntos);//O(1) (estamos accediendo directamente ci nel iterador a la posicion que queremos)
                 //sumas a la serpiente los puntos adquiridos por la manzana
                 infoS.puntos += mapaManzanas[{x, y}].puntos;
 
+                
+                if (!mapaPuntuaciones.count(infoS.puntos)) {
+                    list<string> list;
+                    list.push_back(nombre);
+                    mapaPuntuaciones[infoS.puntos] = list;
+                }
+                else {
+                    mapaPuntuaciones[infoS.puntos].push_front(nombre);
+                }
+                
                 //añades la serpiente de nuevo al mapa de puntuaciones con su nueva puntuacion
-                infoS.ptrPuntos = mapaPuntuaciones.insert(make_pair(infoS.puntos, nombre));//O(logM)
+                infoS.ptrPuntos = mapaPuntuaciones[infoS.puntos].begin();
             }
             //sumas a la serpiente el crecimiento que otorga la manzana
             infoS.crecimiento += mapaManzanas[{x, y}].crecimiento;
@@ -253,9 +273,16 @@ public:
     //O(T) siendo T en el peor caso, el numero de serpientes cuyas puntuaciones queremos mostrar ("num" introducido por parametro)
     vector<pair<string, int>> mejores_puntuaciones(int num) const {
         vector<pair<string, int>> v;  
+        int serpientesImpresas = 0;
         auto it = mapaPuntuaciones.begin();
-        for (int i = 0; i < num && it !=mapaPuntuaciones.end(); i++) {
-            v.push_back({it->second, it->first});
+
+        for (int i = 0; serpientesImpresas < num &&  it != mapaPuntuaciones.end(); i++) {
+            auto itL = it->second.rbegin();
+            for (int j = 0; serpientesImpresas < num && j < it->second.size() && itL != it->second.rend(); j++) {
+                v.push_back({*itL, it->first});
+                serpientesImpresas++;
+                ++itL;
+            }
             ++it;
         }
         return v;
@@ -265,7 +292,7 @@ private:
     // Añade los atributos y funciones privadas que veas necesarias.
     struct InfoSerpiente {
         Posicion pos;
-        multimap<int, string, greater<int>>::iterator  ptrPuntos;//puntero a la posicion de la serpiente en el mapa de puntuaciones
+        list<string>::iterator ptrPuntos; //puntero a la posicion de la serpiente en el mapa de puntuaciones
         int puntos;
         int crecimiento;
         list<Posicion> cuerpo;
@@ -291,9 +318,9 @@ private:
     //(InfoManzana, que contiene los puntos y el crecimiento que otorga la manzana
     unordered_map<Posicion, InfoManzana> mapaManzanas;
 
-    //multimapa cuyas claves son las disintas puntaciones que van tomando las serpientes (int) y sus valores los
-    //nombres de la/las serpientes que poseen esa puntuacion (string)
-    multimap<int, string, greater<int>> mapaPuntuaciones;
+    //mapa de puntuaciones cuyas claves son las disintas puntaciones que van tomando las serpientes (int) y sus valores las
+    //listas con los nombres de las serpientes que tienen dicha puntuacion
+    map<int, list<string>, greater<int>> mapaPuntuaciones;  
 
 
     //metodo privado el cual  dado un nombre de una serpiente que se desea desplazar, unas coordenadas y la informacion de esa serpiente,
@@ -360,12 +387,12 @@ bool tratar_caso() {
                 int puntos = juego.puntuacion(nom);//O(1)
                 cout << nom << " tiene " << puntos << " puntos\n";
             }
-            else if (instruc == "mejores_puntuaciones") {
+            else if (instruc == "mejores_puntuaciones") {//O(T) siendo T = punt (el numero de puntuaciones que se quieren mostrar)
                 cin >> punt;
                 vector<pair<string, int>> v = juego.mejores_puntuaciones(punt);//O(T) siendo T = punt
 
                 cout << "Las " << v.size() << " mejores puntuaciones:\n";
-                for (int i = 0; i < v.size(); i++) {
+                for (int i = 0; i < v.size(); i++) {//O(T) 
                     cout << "  " << v[i].first << " (" << v[i].second << ")\n";
                 }
             }
