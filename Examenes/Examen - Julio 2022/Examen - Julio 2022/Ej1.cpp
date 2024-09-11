@@ -1,6 +1,3 @@
-// Entramar dos listas doblemente enlazadas
-// ----------------------------------------
-// Estructuras de datos
 
 #include <iostream>
 #include <fstream>
@@ -106,7 +103,7 @@ public:
             head->next = head->prev = head;
             copy_nodes_from(other);
             num_elems = other.num_elems;
-            
+
         }
         return *this;
     }
@@ -116,8 +113,7 @@ public:
     void display() const { display(std::cout); }
 
     // El método se implementa más abajo, fuera de la definición de la clase.
-    void zip(ListLinkedDouble& other);
-
+    void desparizar(ListLinkedDouble& aux);
 private:
     // Declara aquí los métodos auxiliares privados que necesites,
 
@@ -141,6 +137,7 @@ ListLinkedDouble::Node* ListLinkedDouble::nth_node(int n) const {
     return current;
 }
 
+
 void ListLinkedDouble::delete_nodes() {
     Node* current = head->next;
     while (current != head) {
@@ -151,6 +148,7 @@ void ListLinkedDouble::delete_nodes() {
 
     delete head;
 }
+
 
 void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble& other) {
     Node* current_other = other.head->next;
@@ -166,86 +164,90 @@ void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble& other) {
 }
 
 void ListLinkedDouble::display(std::ostream& out) const {
-    out << "[";
+    //out << "[";
     if (head->next != head) {
         out << head->next->value;
         Node* current = head->next->next;
         while (current != head) {
-            out << ", " << current->value;
+            out << " " << current->value;
             current = current->next;
         }
     }
-    out << "]";
+    //out << "]";
 }
+
 
 std::ostream& operator<<(std::ostream& out, const ListLinkedDouble& l) {
     l.display(out);
     return out;
 }
 
-// ===========================================================
-// Escribe tu solución por debajo de esta línea
-// ===========================================================
 
-// Implementa el método pedido aquí. No te olvides del coste.
-void ListLinkedDouble::zip(ListLinkedDouble& other) {
-    if (!this->empty() && !other.empty()) {
-       Node* currT = this->head->next;
-       Node* currO = other.head->next;
-        while (currT->next != this->head && currO->next != other.head) {//mientras no legue al final de ninguna de las listas
-            currT = currT->next;
-            currO->prev = currT->prev;
-            currT->prev->next = currO;
-            currT->prev = currO;
-            currO = currO->next;
-            currO->prev->next = currT;
-            //currO->prev = currT;
-        }
-        if (currO != other.head){
-            currT->next = currO;
-            currO->prev = currT;
-            other.head->prev->next = this->head;
-            this->head->prev = other.head->prev;
-        } 
-        if (currT != this->head) {
-            currO->next = currT->next;
-            currT->next->prev = currO;
-            //currT->next = currO;
-        }
 
-        other.head->next = other.head;
-        other.head->prev = other.head;
+//hacer aqui la funcion
+void ListLinkedDouble::desparizar(ListLinkedDouble& aux) {
+    Node* curr = this->head->next;
+    Node* currNext = curr->next;
+    Node* currAux = aux.head->prev;
+
+    while (curr != head) {
+        if ((curr->value % 2) == 0) {
+            curr->prev->next = curr->next;
+            curr->next->prev = curr->prev;
+
+            if (currAux == head) {//si el elemento que se inserta es el primero
+                curr->prev = currAux;
+                curr->next = currAux;
+
+                currAux->next = curr;
+                currAux->prev = curr;
+            }
+            else {
+                curr->next = currAux->next;
+                curr->prev = currAux;
+
+                currAux->next->prev = curr;
+                currAux->next = curr;
+
+                currAux = curr;
+
+            }
+            curr = currNext;
+            currNext = currNext->next;
+        }
+        else {
+            curr = curr->next;
+            currNext = currNext->next;
+        }
     }
-    else if (this->empty() && !other.empty()) {
-        this->head->next = other.head->next;
-        this->head->prev = other.head->prev;
-        other.head->next->prev = this->head;
-        other.head->prev-> next = this->head;
-        other.head->next = other.head;
-        other.head->prev = other.head;
-    }
+
 }
 
 
 void tratar_caso() {
     // Escribe aquí el código para leer de la entrada
     // un caso de prueba y procesarlo.
-    int N, M, num;
-    ListLinkedDouble xs,zs;
-    cin >> N;
-    for (int i = 0; i < N; i++) {
-        cin >> num;
-        xs.push_back(num);
-    }
+  
+    int elem;
+    ListLinkedDouble lista, aux;
+    cin >> elem;
+        while (elem != 0) {
+            lista.push_back(elem);
+            cin >> elem;
+        }
 
-    cin >> M;
-    for (int i = 0; i < M; i++) {
-        cin >> num;
-        zs.push_back(num);
-    }
+        cin >> elem;
+        while (elem != 0) {
+            aux.push_back(elem);
+            cin >> elem;
+        }
 
-    xs.zip(zs);
-    cout << xs << "\n";
+        lista.desparizar(aux);
+        lista.display();
+        cout << "\n";
+        aux.display();
+        cout << "\n";
+
 }
 
 int main() {
@@ -265,6 +267,7 @@ int main() {
     // La entrada comienza con el número de casos de prueba.
     int num_casos;
     cin >> num_casos;
+
 
     // Llamamos tantas veces a `tratar_caso` como nos diga el número.
     for (int i = 0; i < num_casos; i++) {

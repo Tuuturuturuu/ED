@@ -1,0 +1,41 @@
+1
+nuevo_cliente 12A 1
+nuevo_cliente 12A 1
+nuevo_cliente 23B 0
+cambiar_cola 12A 1
+consultar_cliente 12A
+consultar_cliente 23B
+cuantos_en_cola 10
+FIN
+4
+nuevo_cliente 12A 2
+nuevo_cliente 23B 2
+nuevo_cliente 34C 2
+cuantos_en_cola 2
+clientes_en_cola 2
+cuantos_en_cola 0
+clientes_en_cola 0
+cambiar_cola 34C 0
+cambiar_cola 12A 0
+consultar_cliente 34C
+cuantos_en_cola 0
+clientes_en_cola 0
+clientes_en_cola 2
+cambiar_cola 12A 2
+clientes_en_cola 0
+clientes_en_cola 2
+FIN
+3
+nuevo_cliente 12A 2
+nuevo_cliente 12A 1
+nuevo_cliente 23B 4
+cambiar_cola 12A 3
+consultar_cliente 23B
+cuantos_en_cola 10
+FIN
+4
+nuevo_cliente 12A 2
+nuevo_cliente 23B 2
+cambiar_cola 12A 2
+clientes_en_cola 2
+FIN

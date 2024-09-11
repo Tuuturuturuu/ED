@@ -1,10 +1,9 @@
-// Entramar dos listas doblemente enlazadas
+// Partición de una lista enlazada ordenada
 // ----------------------------------------
 // Estructuras de datos
 
 #include <iostream>
 #include <fstream>
-
 #include <cassert>
 
 using namespace std;
@@ -106,27 +105,35 @@ public:
             head->next = head->prev = head;
             copy_nodes_from(other);
             num_elems = other.num_elems;
-            
         }
         return *this;
     }
 
     void display(std::ostream& out) const;
+    void display_reverse(std::ostream& out) const;
+
 
     void display() const { display(std::cout); }
+    void display_reverse() const { display_reverse(std::cout); }
 
-    // El método se implementa más abajo, fuera de la definición de la clase.
-    void zip(ListLinkedDouble& other);
+
+    // Nuevo método
+    // Se implementa más abajo
+    void partition(int pivot);
+
 
 private:
-    // Declara aquí los métodos auxiliares privados que necesites,
-
     Node* head;
     int num_elems;
 
     Node* nth_node(int n) const;
     void delete_nodes();
     void copy_nodes_from(const ListLinkedDouble& other);
+
+    // Nuevos métodos
+    // Se implementan más abajo
+    static void attach(Node* node, Node* before);
+    static void detach(Node* node);
 };
 
 ListLinkedDouble::Node* ListLinkedDouble::nth_node(int n) const {
@@ -177,103 +184,130 @@ void ListLinkedDouble::display(std::ostream& out) const {
     }
     out << "]";
 }
+void ListLinkedDouble::display_reverse(std::ostream& out) const {
+    out << "[";
+    if (head->next != head) {
+        out << head->prev->value;
+        Node* current = head->prev->prev; // faltaba un prev
+        while (current != head) {
+            out << ", " << current->value; // coma y value del reves
+            current = current->prev;
+        }
+    }
+    out << "]";
+}
 
 std::ostream& operator<<(std::ostream& out, const ListLinkedDouble& l) {
     l.display(out);
     return out;
 }
 
-// ===========================================================
-// Escribe tu solución por debajo de esta línea
-// ===========================================================
+// No olvides el coste!
+void ListLinkedDouble::attach(Node* node, Node* before) {
+    // Implementar
+    //meter node en la lista despues de before
+    node->next = before;
+    node->prev = before->prev;
 
-// Implementa el método pedido aquí. No te olvides del coste.
-void ListLinkedDouble::zip(ListLinkedDouble& other) {
-    if (!this->empty() && !other.empty()) {
-       Node* currT = this->head->next;
-       Node* currO = other.head->next;
-        while (currT->next != this->head && currO->next != other.head) {//mientras no legue al final de ninguna de las listas
-            currT = currT->next;
-            currO->prev = currT->prev;
-            currT->prev->next = currO;
-            currT->prev = currO;
-            currO = currO->next;
-            currO->prev->next = currT;
-            //currO->prev = currT;
-        }
-        if (currO != other.head){
-            currT->next = currO;
-            currO->prev = currT;
-            other.head->prev->next = this->head;
-            this->head->prev = other.head->prev;
-        } 
-        if (currT != this->head) {
-            currO->next = currT->next;
-            currT->next->prev = currO;
-            //currT->next = currO;
-        }
+    //reajustar los punteros de la lista con node en medio
+    before->prev->next = node;
+    before->prev = node;
+}
 
-        other.head->next = other.head;
-        other.head->prev = other.head;
-    }
-    else if (this->empty() && !other.empty()) {
-        this->head->next = other.head->next;
-        this->head->prev = other.head->prev;
-        other.head->next->prev = this->head;
-        other.head->prev-> next = this->head;
-        other.head->next = other.head;
-        other.head->prev = other.head;
+// No olvides el coste!
+//Complejidad: O(1)
+void ListLinkedDouble::detach(Node* node) {
+    // Implementar
+    //punteros de la lista se descuelgan de node
+    node->next->prev = node->prev;
+    node->prev->next = node->next;
+
+    //next y prev de node apuntan a node
+    node->next = node;
+    node->prev = node;
+}
+
+
+// No olvides el coste!
+void ListLinkedDouble::partition(int pivot) {
+    // Implementar
+    bool end = false;
+    int s = this->size();
+    if (s > 1 && !this->empty()) {
+        Node* curr = this->head->next;
+        Node* p = curr;
+        int i = 1;
+       /* curr = head->next;
+        Desde i = 1 hasta size() :
+            Si curr->value es menor o igual que el pivote, avanzar curr.
+            Si curr->value es mayor que el pivote, desengancharlo y engancharlo antes de la cabeza(es decir, ponerlo al final) y actualizar curr*/
+
+        while (curr != this->head) {
+        //while(i < this->size()){
+            //al principio coges p (el primer valor mayor que pivot) y luego en el reto de los casos no
+            if (curr == this->head->next) {
+                while (curr->value <= pivot && s > 0) {
+                    curr = curr->next;
+                    s--;
+                }
+                p = curr;
+            }
+            //si encunetra un nodo con un valor menor o igual que pivot lo mueve a detras de p
+            if (curr->value <= pivot) {
+                Node* currNext = curr->next;
+                this->detach(curr);
+                this->attach(curr, p);
+                curr = currNext;
+                
+            }
+            else {// si el valor del nodo es mayor que pivot avanza al elem siguiente
+                curr = curr->next;
+            }
+            i++;
+        }
+       
     }
 }
+
 
 
 void tratar_caso() {
-    // Escribe aquí el código para leer de la entrada
-    // un caso de prueba y procesarlo.
-    int N, M, num;
-    ListLinkedDouble xs,zs;
-    cin >> N;
-    for (int i = 0; i < N; i++) {
-        cin >> num;
-        xs.push_back(num);
-    }
+    int num, pivot;
+    ListLinkedDouble lista;
 
-    cin >> M;
-    for (int i = 0; i < M; i++) {
+    //leer la lista y el pivote
+    cin >> num;
+    while (num != 0) {
+        lista.push_back(num);
         cin >> num;
-        zs.push_back(num);
     }
+    cin >> pivot;
 
-    xs.zip(zs);
-    cout << xs << "\n";
+    //operar
+    lista.partition(pivot);
+
+    //mostrar la salida
+    cout << lista << "\n";
+    lista.display_reverse();
+    cout << "\n";
 }
 
-int main() {
 
-    // Si estás ejecutando el programa en tu ordenador, las siguientes líneas
-    // redirigiran cualquier lectura de cin al fichero 'sample.in'. Esto es
-    // útil para no tener que teclear los casos de prueba por teclado cada vez
-    // que ejecutas el programa.
-    //
-    // Si prefieres teclear los casos de prueba por teclado en tu ordenador,
-    // comenta las líneas comprendidas entre los #ifndef y #endif
+
+int main() {
 #ifndef DOMJUDGE
-    std::ifstream in("sample.in");
+        std::ifstream in("sample.in");
     auto cinbuf = std::cin.rdbuf(in.rdbuf());
 #endif
-
-    // La entrada comienza con el número de casos de prueba.
     int num_casos;
     cin >> num_casos;
 
-    // Llamamos tantas veces a `tratar_caso` como nos diga el número.
     for (int i = 0; i < num_casos; i++) {
         tratar_caso();
     }
-
-    // Comenta esto también si has comentado lo anterior.   
 #ifndef DOMJUDGE
     std::cin.rdbuf(cinbuf);
 #endif
+
     return 0;
 }

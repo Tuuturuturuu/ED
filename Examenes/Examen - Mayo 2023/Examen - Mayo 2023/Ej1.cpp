@@ -1,6 +1,3 @@
-// Entramar dos listas doblemente enlazadas
-// ----------------------------------------
-// Estructuras de datos
 
 #include <iostream>
 #include <fstream>
@@ -12,7 +9,7 @@ using namespace std;
 class ListLinkedDouble {
 private:
     struct Node {
-        int value;
+        string value;
         Node* next;
         Node* prev;
     };
@@ -31,14 +28,14 @@ public:
 
     ~ListLinkedDouble() { delete_nodes(); }
 
-    void push_front(const int& elem) {
+    void push_front(const string& elem) {
         Node* new_node = new Node{ elem, head->next, head };
         head->next->prev = new_node;
         head->next = new_node;
         num_elems++;
     }
 
-    void push_back(const int& elem) {
+    void push_back(const string& elem) {
         Node* new_node = new Node{ elem, head, head->prev };
         head->prev->next = new_node;
         head->prev = new_node;
@@ -67,33 +64,33 @@ public:
 
     bool empty() const { return num_elems == 0; };
 
-    const int& front() const {
+    const string& front() const {
         assert(num_elems > 0);
         return head->next->value;
     }
 
-    int& front() {
+    string& front() {
         assert(num_elems > 0);
         return head->next->value;
     }
 
-    const int& back() const {
+    const string& back() const {
         assert(num_elems > 0);
         return head->prev->value;
     }
 
-    int& back() {
+    string& back() {
         assert(num_elems > 0);
         return head->prev->value;
     }
 
-    const int& operator[](int index) const {
+    const string& operator[](int index) const {
         assert(0 <= index && index < num_elems);
         Node* result_node = nth_node(index);
         return result_node->value;
     }
 
-    int& operator[](int index) {
+    string& operator[](int index) {
         assert(0 <= index && index < num_elems);
         Node* result_node = nth_node(index);
         return result_node->value;
@@ -106,7 +103,7 @@ public:
             head->next = head->prev = head;
             copy_nodes_from(other);
             num_elems = other.num_elems;
-            
+
         }
         return *this;
     }
@@ -116,7 +113,7 @@ public:
     void display() const { display(std::cout); }
 
     // El método se implementa más abajo, fuera de la definición de la clase.
-    void zip(ListLinkedDouble& other);
+    void rotar_derecha();
 
 private:
     // Declara aquí los métodos auxiliares privados que necesites,
@@ -141,6 +138,7 @@ ListLinkedDouble::Node* ListLinkedDouble::nth_node(int n) const {
     return current;
 }
 
+
 void ListLinkedDouble::delete_nodes() {
     Node* current = head->next;
     while (current != head) {
@@ -151,6 +149,7 @@ void ListLinkedDouble::delete_nodes() {
 
     delete head;
 }
+
 
 void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble& other) {
     Node* current_other = other.head->next;
@@ -165,6 +164,7 @@ void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble& other) {
     head->prev = last;
 }
 
+
 void ListLinkedDouble::display(std::ostream& out) const {
     out << "[";
     if (head->next != head) {
@@ -178,74 +178,96 @@ void ListLinkedDouble::display(std::ostream& out) const {
     out << "]";
 }
 
+
 std::ostream& operator<<(std::ostream& out, const ListLinkedDouble& l) {
     l.display(out);
     return out;
 }
 
-// ===========================================================
-// Escribe tu solución por debajo de esta línea
-// ===========================================================
+//hacer aqui la funcion
+//Complejidad: O(N) siendo N el numero de elementos de la lista
 
-// Implementa el método pedido aquí. No te olvides del coste.
-void ListLinkedDouble::zip(ListLinkedDouble& other) {
-    if (!this->empty() && !other.empty()) {
-       Node* currT = this->head->next;
-       Node* currO = other.head->next;
-        while (currT->next != this->head && currO->next != other.head) {//mientras no legue al final de ninguna de las listas
-            currT = currT->next;
-            currO->prev = currT->prev;
-            currT->prev->next = currO;
-            currT->prev = currO;
-            currO = currO->next;
-            currO->prev->next = currT;
-            //currO->prev = currT;
-        }
-        if (currO != other.head){
-            currT->next = currO;
-            currO->prev = currT;
-            other.head->prev->next = this->head;
-            this->head->prev = other.head->prev;
-        } 
-        if (currT != this->head) {
-            currO->next = currT->next;
-            currT->next->prev = currO;
-            //currT->next = currO;
-        }
+void ListLinkedDouble::rotar_derecha() {
+    if (!this->empty() && this->size() > 1) {
+        Node* curr = head->next;
+        Node* currNextI = head->next->next->next;
+        bool end = false;
+        while (!end) {
 
-        other.head->next = other.head;
-        other.head->prev = other.head;
-    }
-    else if (this->empty() && !other.empty()) {
-        this->head->next = other.head->next;
-        this->head->prev = other.head->prev;
-        other.head->next->prev = this->head;
-        other.head->prev-> next = this->head;
-        other.head->next = other.head;
-        other.head->prev = other.head;
+            if ((this->size() % 2) != 0) {//numero impar de elems
+                curr->next->prev = curr->prev;
+                curr->prev->next = curr->next;
+
+                curr->next = currNextI;
+                curr->prev = currNextI->prev;
+
+                currNextI->prev->next = curr;
+                currNextI->prev = curr;
+                if (curr->prev != head && currNextI->prev->prev != head) {
+                    curr = currNextI;
+                    currNextI = currNextI->next->next;
+                }
+                else {
+                    end = true;
+                }
+            }
+            else {//numero par de elementos
+                if (currNextI == head) {
+                    curr->next->prev = curr->prev;
+                    curr->prev->next = curr->next;
+
+                    curr->next = currNextI->next;
+                    curr->prev = currNextI;
+
+                    currNextI->next->prev = curr;
+                    currNextI->next = curr;
+
+                    end = true;
+                }
+                else {
+                    curr->next->prev = curr->prev;
+                    curr->prev->next = curr->next;
+
+                    curr->next = currNextI;
+                    curr->prev = currNextI->prev;
+
+                    currNextI->prev->next = curr;
+                    currNextI->prev = curr;
+
+                    //avanzar punteeros
+                    curr = currNextI;
+                    currNextI = currNextI->next->next;
+                }
+            }
+        }
     }
 }
 
 
-void tratar_caso() {
+bool tratar_caso() {
     // Escribe aquí el código para leer de la entrada
     // un caso de prueba y procesarlo.
-    int N, M, num;
-    ListLinkedDouble xs,zs;
-    cin >> N;
-    for (int i = 0; i < N; i++) {
-        cin >> num;
-        xs.push_back(num);
-    }
+    bool ret = true;
 
-    cin >> M;
-    for (int i = 0; i < M; i++) {
-        cin >> num;
-        zs.push_back(num);
-    }
+    int N;
+    string elem;
+    ListLinkedDouble lista;
 
-    xs.zip(zs);
-    cout << xs << "\n";
+    if(cin >> N) {
+        for (int i = 0; i < N; i++) {
+            cin >> elem;
+            lista.push_back(elem);
+        }
+
+        lista.rotar_derecha();
+        lista.display();
+        cout << "\n";
+    }
+    else {
+        ret = false;
+    }
+    
+    return ret;
 }
 
 int main() {
@@ -263,12 +285,10 @@ int main() {
 #endif
 
     // La entrada comienza con el número de casos de prueba.
-    int num_casos;
-    cin >> num_casos;
+    
 
     // Llamamos tantas veces a `tratar_caso` como nos diga el número.
-    for (int i = 0; i < num_casos; i++) {
-        tratar_caso();
+    while (tratar_caso()) {
     }
 
     // Comenta esto también si has comentado lo anterior.   
@@ -277,3 +297,4 @@ int main() {
 #endif
     return 0;
 }
+

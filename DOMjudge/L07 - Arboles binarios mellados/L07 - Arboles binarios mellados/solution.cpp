@@ -176,8 +176,7 @@ int calcularMellas(const BinTree<T>& t,int alt, int i, bool &isLastFull) {
         if (!t.empty()) {
             mellas += calcularMellas(t.left(), alt, i + 1, isLastFull);
             mellas += calcularMellas(t.right(), alt, i + 1, isLastFull);
-        }
-        
+        } 
     }
     return mellas;
 }
